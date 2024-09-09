@@ -3,7 +3,14 @@ const userModel = require('../models/userModels');
 const index = async (req, res) => {
     try {
         const users = await userModel.getAllUsers();
-        res.json(users);
+        if(!users) {
+            return res.status(404).json({
+                status: 404,
+                message: 'User Not Found'
+            });
+        }
+
+        return res.json(users);
     } catch (error) {
         res.json(error);
     }
@@ -12,7 +19,21 @@ const index = async (req, res) => {
 const show = async (req, res) => {
     try {
         const user = await userModel.getUserById(req.params.id);
-        res.json(user);
+        
+        if(!user) {
+            return res.status(404).json({
+                status: 404,
+                message: 'User Not Found'
+            });
+        }
+        
+        return res.status(200).json({
+            status : 200,
+            message: 'User Success Get',
+            data: user
+        });
+
+        
     } catch (error) {
         res.json(error);
     }
@@ -21,7 +42,7 @@ const show = async (req, res) => {
 const store = async (req, res) => {
     try {
         const user = await userModel.createUser(req.body);
-        res.status(200).json({
+        return res.status(200).json({
             status: 200,
             message: 'User Success Create',
         })
@@ -33,7 +54,7 @@ const store = async (req, res) => {
 const update = async (req, res) => {
     try {
         const user = await userModel.updateUser(req.params.id, req.body);
-        res.status(200).json({
+        return res.status(200).json({
             status: 200,
             message: 'User Success Updated',
         })

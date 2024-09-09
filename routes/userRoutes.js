@@ -5,7 +5,8 @@ const router = express.Router();
 
 const {
     validationAuthData,
-    validationUserData
+    validationUserData,
+    validationUpdateUser
 } = require('../validations/userValidations');
 const {checkIfPayloadIsCorrect} = require('../helpers/checkValidations');
 
@@ -19,7 +20,7 @@ router.post('/login', validationAuthData, checkIfPayloadIsCorrect,  AuthControll
 router.get('/', checkTokenIsValid, UserController.index);
 router.post('/', validationUserData, checkIfPayloadIsCorrect, UserController.store);
 router.get('/:id', checkTokenIsValid, UserController.show);
-router.put('/:id', checkTokenIsValid, checkRoles, validationUserData, checkIfPayloadIsCorrect, UserController.update);
+router.put('/:id', checkTokenIsValid, checkRoles, validationUpdateUser, checkIfPayloadIsCorrect, UserController.update);
 router.delete('/:id', checkTokenIsValid, checkRoles, UserController.destroy);
 
 module.exports = router;

@@ -1,11 +1,18 @@
 const connection = require('../configs/connection');
 
 const getAllUsers = async () => {
-    const query = 'SELECT * FROM user';
+    const query = `SELECT 
+    user.id AS user_id, 
+    user.email, 
+    user.password, 
+    role.id AS role_id, 
+    role.role AS role_name
+    FROM user 
+    JOIN role ON role.id = user.role_id`;
     
-    const [rows] = await connection.execute(query);
+    const [rows] = await connection.execute(query)
 
-    return rows;
+    return formattedResult(rows);
 }
 
 const getUserByEmail = async (email) => {
@@ -14,13 +21,11 @@ const getUserByEmail = async (email) => {
     const [rows] = await connection.execute(query, [email]);
 
     const user = rows[0];
-    return rows[0];
     const formattedResult = {
         id: user.id,
         email: user.email,
         password: user.password,
         role: {
-            id: user.role_id,
             role: user.role,
         }
     };
@@ -86,6 +91,17 @@ const deleteUser = async (id) => {
     const [rows] = await connection.execute(query, [id]);
 
     return rows;
+}
+
+formattedResult = (user) => {
+    return user.map(userData => ({
+        user_id: userData.user_id,
+        email: userData.email,
+        role: {
+            role_id: userData.role_id,
+            role_name: userData.role_name
+        }
+      }));
 }
 
 module.exports = {

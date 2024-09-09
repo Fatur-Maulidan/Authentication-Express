@@ -17,10 +17,18 @@ const validationUserData = [
             }
         }),
     body('password').notEmpty().withMessage('Password is required').bail()
-        .isLength({min: 3}).withMessage('Password must be at least 3 characters long'),
+        .isLength({min: 8}).withMessage('Password must be at least 8 characters long'),
+]
+
+const validationUpdateUser = [
+    body('email').trim().normalizeEmail().notEmpty().withMessage('Email is required').bail()
+        .isEmail().withMessage('Email is not valid'),
+    body('password').notEmpty().withMessage('Password is required').bail()
+        .isLength({min: 8}).withMessage('Password must be at least 8 characters long'),
 ]
 
 module.exports = {
     validationAuthData,
-    validationUserData
+    validationUserData,
+    validationUpdateUser
 }
