@@ -20,7 +20,7 @@ router.post('/login', validationAuthData, checkIfPayloadIsCorrect,  AuthControll
 router.get('/', checkTokenIsValid, UserController.index);
 router.post('/', checkTokenIsValid, checkRoles, validationUserData, checkIfPayloadIsCorrect, UserController.store);
 router.get('/:id', checkTokenIsValid, UserController.show);
-router.put('/:id', checkTokenIsValid, checkRoles, UserController.update);
+router.put('/:id', checkTokenIsValid, checkRoles, validationUserData, checkIfPayloadIsCorrect, UserController.update);
 router.delete('/:id', checkTokenIsValid, checkRoles, UserController.destroy);
 
 module.exports = router;
